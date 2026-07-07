@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الألعاب</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f1115;
+    --bg2:#161a22;
+    --gold:#d4af37;
+    --gold-soft:#e9c766;
+    --text:#f2f0ea;
+    --text-dim:#9aa0ab;
+    --line:rgba(212,175,55,0.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 20% 10%, rgba(212,175,55,0.06), transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(212,175,55,0.05), transparent 40%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Cairo',sans-serif;
+    min-height:100vh;
+    padding:40px 20px 60px;
+  }
+  header{
+    text-align:center;
+    margin-bottom:44px;
+  }
+  header .eyebrow{
+    color:var(--gold);
+    letter-spacing:4px;
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+  }
+  header h1{
+    font-size:32px;
+    font-weight:900;
+    margin-top:10px;
+  }
+  header p{
+    color:var(--text-dim);
+    margin-top:8px;
+    font-size:14px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:18px;
+    max-width:1000px;
+    margin:0 auto;
+  }
+  .card{
+    background:#10131a;
+    border:1px solid var(--line);
+    border-radius:16px;
+    text-align:center;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    height:220px;
+    transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .card img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:transform .35s ease, filter .35s ease;
+    filter:saturate(0.9) brightness(0.85);
+  }
+  .card::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg, rgba(15,17,21,0.05) 30%, rgba(15,17,21,0.92) 88%);
+  }
+  .card:hover{
+    transform:translateY(-6px);
+    border-color:var(--gold);
+    box-shadow:0 14px 30px rgba(0,0,0,0.45);
+  }
+  .card:hover img{
+    transform:scale(1.06);
+    filter:saturate(1) brightness(0.95);
+  }
+  .card-label{
+    position:absolute;
+    bottom:0;
+    right:0;
+    left:0;
+    padding:16px 12px 18px;
+    z-index:1;
+  }
+  .card h2{
+    font-size:17px;
+    font-weight:700;
+  }
+  .card span.tag{
+    display:block;
+    margin-top:4px;
+    font-size:11px;
+    letter-spacing:1px;
+    color:var(--gold-soft);
+  }
+  @media (max-width:480px){
+    header h1{font-size:24px;}
+    .grid{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">دوري التسلية</div>
+  <h1>اختر اللعبة</h1>
+  <p>اضغط على الكرت للدخول</p>
+</header>
+
+<div class="grid">
+
+  <div class="card" onclick="location.href='football.html'">
+    <img src="football.webp" alt="كورة">
+    <div class="card-label">
+      <h2>كورة</h2>
+      <span class="tag">FOOTBALL</span>
+    </div>
+  </div>
+
+  <div class="card" onclick="location.href='chess.html'">
+    <img src="chess.jpg" alt="شطرنج">
+    <div class="card-label">
+      <h2>شطرنج</h2>
+      <span class="tag">CHESS</span>
+    </div>
+  </div>
+
+  <div class="card" onclick="location.href='domino.html'">
+    <img src="domino.jpg" alt="دومينو">
+    <div class="card-label">
+      <h2>دومينو</h2>
+      <span class="tag">DOMINO</span>
+    </div>
+  </div>
+
+  <div class="card" onclick="location.href='playstation.html'">
+    <img src="playstation.jpg" alt="بلايستيشن">
+    <div class="card-label">
+      <h2>بلايستيشن</h2>
+      <span class="tag">PLAYSTATION</span>
+    </div>
+  </div>
+
+  <div class="card" onclick="location.href='pingpong.html'">
+    <img src="pingpong.jpg" alt="بينج بونج">
+    <div class="card-label">
+      <h2>بينج بونج</h2>
+      <span class="tag">PING PONG</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
