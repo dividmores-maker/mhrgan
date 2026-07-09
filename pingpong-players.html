@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الفرق</title>
+<title>اللاعبين</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -54,6 +54,18 @@
     background-image:radial-gradient(rgba(255,255,255,0.5) 0.5px, transparent 0.5px);
     background-size:3px 3px; mix-blend-mode:overlay;
   }
+  .logo-watermark{
+    position:fixed;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:min(60vw, 420px);
+    height:auto;
+    opacity:0.14;
+    z-index:0;
+    pointer-events:none;
+    filter:drop-shadow(0 0 30px rgba(168,85,247,0.25));
+  }
 
   .back-btn{
     position:relative; z-index:1;
@@ -67,7 +79,7 @@
   }
   .back-btn:hover{ border-color:var(--violet); color:var(--text); box-shadow:0 0 16px rgba(168,85,247,0.3); }
 
-  header{ position:relative; z-index:1; text-align:center; margin:30px 0 44px; }
+  header{ position:relative; z-index:1; text-align:center; margin:30px 0 40px; }
   .logo-small{
     position:absolute; top:0; right:0; z-index:2; width:48px; height:auto;
     filter:drop-shadow(0 0 14px rgba(168,85,247,0.4));
@@ -79,62 +91,11 @@
     letter-spacing:5px; font-family:'Orbitron',sans-serif; font-size:11px; font-weight:800; text-transform:uppercase;
   }
   header h1{
-    font-size:clamp(24px, 5vw, 34px); font-weight:900; margin-top:12px; color:var(--text);
+    font-size:clamp(24px, 5vw, 32px); font-weight:900; margin-top:12px; color:var(--text);
     text-shadow:0 0 40px rgba(168,85,247,0.35); letter-spacing:0.5px;
   }
   header p{ color:var(--text-dim); margin-top:8px; font-size:14px; }
 
-  /* ---------- Team selection cards (3D tilt) ---------- */
-  .grid{
-    position:relative; z-index:1;
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-    gap:20px; max-width:1000px; margin:0 auto; perspective:1200px;
-  }
-  .team-card{
-    --accent:var(--violet);
-    --mx:50%; --my:50%;
-    background:linear-gradient(160deg, var(--bg2), #0e0620);
-    border-radius:18px;
-    padding:22px;
-    cursor:pointer;
-    position:relative;
-    overflow:hidden;
-    transform-style:preserve-3d;
-    will-change:transform;
-    transition:box-shadow .3s ease;
-  }
-  .team-card .ring{
-    position:absolute; inset:0; border-radius:18px; padding:2px;
-    background:linear-gradient(135deg, var(--accent), transparent 40%, transparent 60%, var(--accent));
-    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite:xor; mask-composite:exclude;
-    opacity:0.5; z-index:2; pointer-events:none; transition:opacity .3s ease;
-  }
-  .team-card .sheen{
-    position:absolute; inset:0; z-index:1; opacity:0;
-    background:radial-gradient(240px circle at var(--mx) var(--my),
-      rgba(255,255,255,0.16), color-mix(in srgb, var(--accent) 45%, transparent) 35%, transparent 62%);
-    mix-blend-mode:screen; transition:opacity .35s ease; pointer-events:none;
-  }
-  .team-card:hover .ring{ opacity:1; }
-  .team-card:hover .sheen{ opacity:1; }
-  .team-card:hover{
-    box-shadow:0 18px 36px rgba(0,0,0,0.5), 0 0 26px color-mix(in srgb, var(--accent) 45%, transparent);
-  }
-  .team-card .tc-content{ position:relative; z-index:3; transform:translateZ(24px); }
-  .team-card h2{ font-size:18px; font-weight:800; color:var(--text); }
-  .team-card .count{ margin-top:8px; font-size:13px; color:var(--text-dim); }
-  .team-card .hint{
-    margin-top:14px; font-size:11px; color:var(--accent); letter-spacing:.5px;
-    border-top:1px solid rgba(255,255,255,0.08); padding-top:12px; font-weight:700;
-  }
-  .team-card:nth-child(5n+1){ --accent:var(--lime); }
-  .team-card:nth-child(5n+2){ --accent:var(--violet); }
-  .team-card:nth-child(5n+3){ --accent:var(--amber); }
-  .team-card:nth-child(5n+4){ --accent:var(--cyan); }
-  .team-card:nth-child(5n+5){ --accent:var(--pink); }
-
-  /* ---------- Player (FIFA-style) cards ---------- */
   .player-grid{
     position:relative; z-index:1;
     display:grid;
@@ -149,57 +110,92 @@
     aspect-ratio:300/470;
     margin:0 auto;
     position:relative;
-    filter:drop-shadow(0 14px 26px rgba(0,0,0,0.6)) drop-shadow(0 0 18px rgba(168,85,247,0.12));
-    transition:transform .25s ease, filter .25s ease;
+    filter:drop-shadow(0 14px 22px rgba(0,0,0,0.55));
+    transition:transform .25s ease;
     direction:ltr;
   }
-  .fifa-card:hover{ transform:translateY(-6px) scale(1.03); filter:drop-shadow(0 18px 30px rgba(0,0,0,0.65)) drop-shadow(0 0 26px rgba(168,85,247,0.28)); }
-  .fifa-card .frame-svg{ position:absolute; inset:0; width:100%; height:100%; display:block; }
-  .fifa-card .photo-wrap{
-    position:absolute; left:13%; right:13%; top:9%; height:56%;
-    overflow:hidden; border-radius:30px; z-index:1; background:transparent;
+  .fifa-card:hover{ transform:translateY(-6px) scale(1.02); }
+  .fifa-card .frame-svg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    display:block;
   }
-  .fifa-card .photo-wrap img{ width:100%; height:100%; object-fit:contain; object-position:center top; display:block; border-radius:30px; }
+  .fifa-card .photo-wrap{
+    position:absolute;
+    left:13%;
+    right:13%;
+    top:9%;
+    height:56%;
+    overflow:hidden;
+    border-radius:30px;
+    z-index:1;
+    background:transparent;
+  }
+  .fifa-card .photo-wrap img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    object-position:center top;
+    display:block;
+    border-radius:30px;
+  }
   .fifa-card .photo-wrap .shine{
-    position:absolute; inset:0;
+    position:absolute;
+    inset:0;
     background:linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.2) 48%, transparent 62%);
     pointer-events:none;
   }
   .fifa-card .photo-wrap .fade{
-    position:absolute; left:0; right:0; bottom:0; height:38%;
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    height:38%;
     background:linear-gradient(to bottom, transparent 0%, rgba(238,226,192,0.55) 55%, rgba(238,226,192,0.96) 100%);
     pointer-events:none;
   }
   .fifa-card .name-bar{
-    position:absolute; left:10%; right:10%; top:67%; z-index:2; text-align:center;
-    padding-top:6px; border-top:1.5px dashed rgba(74,55,20,0.4);
+    position:absolute;
+    left:10%;
+    right:10%;
+    top:67%;
+    z-index:2;
+    text-align:center;
+    padding-top:6px;
+    border-top:1.5px dashed rgba(74,55,20,0.4);
   }
   .fifa-card .name-bar h3{
-    font-size:clamp(11px,3.8vw,14px); font-weight:900; letter-spacing:.3px; color:#3a2c10;
-    text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    font-size:clamp(11px,3.8vw,14px);
+    font-weight:900;
+    letter-spacing:.3px;
+    color:#3a2c10;
+    text-transform:uppercase;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
   }
-  .fifa-card .name-bar .age{ font-size:11px; color:#8a6a22; margin-top:3px; font-weight:700; }
-
-  .no-players{ color:var(--text-dim); font-size:13px; font-style:italic; }
+  .fifa-card .name-bar .age{
+    font-size:11px;
+    color:#8a6a22;
+    margin-top:3px;
+    font-weight:700;
+  }
   .empty-hint{
     position:relative; z-index:1;
-    text-align:center; color:var(--text-dim); font-size:14px;
-    padding:60px 10px; max-width:500px; margin:0 auto;
-    border:1px dashed rgba(168,85,247,0.3); border-radius:16px;
+    text-align:center;
+    color:var(--text-dim);
+    font-size:14px;
+    padding:60px 10px;
+    max-width:500px;
+    margin:0 auto;
+    border:1px dashed rgba(168,85,247,0.28);
+    border-radius:16px;
+    background:rgba(21,10,41,0.3);
   }
-  @media (max-width:480px){ header h1{font-size:22px;} }
-  @media (hover:none){ .sheen{display:none;} .ring{opacity:0.45;} }
-  .logo-watermark{
-    position:fixed;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-    width:min(60vw, 420px);
-    height:auto;
-    opacity:0.14;
-    z-index:0;
-    pointer-events:none;
-    filter:drop-shadow(0 0 30px rgba(168,85,247,0.25));
+  @media (max-width:480px){
+    header h1{font-size:24px;}
   }
 </style>
 </head>
@@ -228,13 +224,13 @@
   </defs>
 </svg>
 
-<a class="back-btn" href="#" id="backLink">→ رجوع للمرحلة</a>
+<a class="back-btn" id="backLink" href="pingpong-stage.html">→ رجوع للمرحلة</a>
 
 <header>
   <img class="logo-small" src="logo.png" alt="لجنة الأنشطة والمسابقات">
   <div class="eyebrow">دوري التسلية</div>
-  <h1 id="pageTitle">الفرق</h1>
-  <p id="pageSubtitle">الفرق واللاعبين في المرحلة دي</p>
+  <h1 id="pageTitle">اللاعبين</h1>
+  <p id="pageSubtitle">لاعبين المرحلة دي</p>
 </header>
 
 <div id="content">
@@ -257,120 +253,47 @@
 
   const params = new URLSearchParams(window.location.search);
   const stage = params.get('stage') || '1';
-  const game = params.get('game') || 'football';
+  const game = 'pingpong';
 
   const stageNames = {
     '1': 'المرحلة الأولى',
-    '2': 'المرحلة الثانية',
-    '3': 'المرحلة الثالثة',
-    '4': 'المرحلة الرابعة'
+    '2': 'المرحلة الثانية'
   };
 
   const pageTitleEl = document.getElementById('pageTitle');
   const pageSubtitleEl = document.getElementById('pageSubtitle');
   const backLink = document.getElementById('backLink');
   const content = document.getElementById('content');
-  const stageBackHref = `${game}-stage.html?stage=${stage}`;
 
-  document.title = 'فرق ' + (stageNames[stage] || 'المرحلة');
-
-  let teamsData = [];
-  let currentTeamId = null;
-
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const supportsHover = window.matchMedia('(hover: hover)').matches;
-
-  function attachTilt(card){
-    if(reduceMotion || !supportsHover) return;
-    const maxTilt = 8;
-    card.addEventListener('mousemove', e => {
-      const rect = card.getBoundingClientRect();
-      const px = (e.clientX - rect.left) / rect.width;
-      const py = (e.clientY - rect.top) / rect.height;
-      const tiltX = (0.5 - py) * maxTilt;
-      const tiltY = (px - 0.5) * maxTilt;
-      card.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-      card.style.setProperty('--mx', `${px * 100}%`);
-      card.style.setProperty('--my', `${py * 100}%`);
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'rotateX(0deg) rotateY(0deg)';
-    });
-  }
-
-  function normalizePlayer(p){
-    if(typeof p === 'string') return { name: p, age: '', photo: '' };
-    return { name: p.name || '', age: p.age || '', photo: p.photo || '' };
-  }
+  document.title = 'لاعبين ' + (stageNames[stage] || 'المرحلة');
+  pageTitleEl.textContent = 'لاعبين ' + (stageNames[stage] || 'المرحلة');
+  pageSubtitleEl.textContent = 'لاعبين المرحلة دي';
+  backLink.href = `pingpong-stage.html?stage=${stage}`;
 
   function fallbackAvatar(){
     return 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 130"><rect width="100" height="130" fill="%231c2029"/><circle cx="50" cy="46" r="22" fill="%232a303c"/><path d="M10 130c0-30 18-46 40-46s40 16 40 46" fill="%232a303c"/></svg>';
   }
 
-  function showTeamsScreen(){
-    currentTeamId = null;
-    pageTitleEl.textContent = 'فرق ' + (stageNames[stage] || 'المرحلة');
-    document.title = 'فرق ' + (stageNames[stage] || 'المرحلة');
-    pageSubtitleEl.textContent = 'الفرق واللاعبين في المرحلة دي';
-    backLink.textContent = '→ رجوع للمرحلة';
-    backLink.href = stageBackHref;
-    backLink.onclick = null;
-    renderTeamsScreen();
+  // كل "فريق" في الدومينو بيمثل لاعب واحد؛ اسم اللاعب هو اسم الفريق،
+  // والسن والصورة بييجوا من أول عنصر في مصفوفة players بتاعة الفريق (لو موجود)
+  function normalizeTeamAsPlayer(team){
+    const p = (Array.isArray(team.players) && team.players[0]) ? team.players[0] : {};
+    return { name: team.name || p.name || '', age: p.age || '', photo: p.photo || '' };
   }
 
-  function showPlayersScreen(team){
-    currentTeamId = team.id;
-    pageTitleEl.textContent = team.name;
-    document.title = team.name;
-    pageSubtitleEl.textContent = 'لاعبين الفريق';
-    backLink.textContent = '→ رجوع للفرق';
-    backLink.href = '#';
-    backLink.onclick = (e) => { e.preventDefault(); showTeamsScreen(); };
-    renderPlayersScreen(team);
-  }
-
-  function renderTeamsScreen(){
+  function renderPlayers(teamsData){
     if(teamsData.length === 0){
-      content.innerHTML = '<div class="empty-hint">مفيش فرق متضافة للمرحلة دي لسه</div>';
+      content.innerHTML = '<div class="empty-hint">مفيش لاعبين مضافين لسه للمرحلة دي</div>';
       return;
     }
-    const grid = document.createElement('div');
-    grid.className = 'grid';
 
-    teamsData.forEach(team => {
-      const players = Array.isArray(team.players) ? team.players.map(normalizePlayer) : [];
-      const card = document.createElement('div');
-      card.className = 'team-card';
-      card.onclick = () => showPlayersScreen(team);
-
-      card.innerHTML =
-        '<div class="ring"></div><div class="sheen"></div>' +
-        '<div class="tc-content">' +
-          '<h2>' + team.name + '</h2>' +
-          '<div class="count">' + (players.length > 0 ? (players.length + ' لاعب') : 'مفيش لاعبين مضافين لسه') + '</div>' +
-          '<div class="hint">دوس لعرض اللاعبين ←</div>' +
-        '</div>';
-
-      attachTilt(card);
-      grid.appendChild(card);
-    });
-
-    content.innerHTML = '';
-    content.appendChild(grid);
-  }
-
-  function renderPlayersScreen(team){
-    const players = Array.isArray(team.players) ? team.players.map(normalizePlayer) : [];
-    if(players.length === 0){
-      content.innerHTML = '<div class="empty-hint">مفيش لاعبين مضافين لسه لفريق ' + team.name + '</div>';
-      return;
-    }
     const grid = document.createElement('div');
     grid.className = 'player-grid';
 
     const SHIELD_PATH = 'M150 6 C108 6 66 11 42 26 C24 37 15 53 15 74 L15 300 C15 335 30 362 55 380 C90 405 120 415 150 428 C180 415 210 405 245 380 C270 362 285 335 285 300 L285 74 C285 53 276 37 258 26 C234 11 192 6 150 6 Z';
 
-    players.forEach(p => {
+    teamsData.forEach(raw => {
+      const p = normalizeTeamAsPlayer(raw);
       const card = document.createElement('div');
       card.className = 'fifa-card';
 
@@ -414,7 +337,6 @@
       }
 
       card.appendChild(nameBar);
-
       grid.appendChild(card);
     });
 
@@ -429,18 +351,7 @@
       const docs = [];
       snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
       docs.sort((a,b) => (a.order||0) - (b.order||0));
-      teamsData = docs;
-
-      if(currentTeamId){
-        const team = teamsData.find(t => t.id === currentTeamId);
-        if(team){
-          renderPlayersScreen(team);
-        } else {
-          showTeamsScreen();
-        }
-      } else {
-        renderTeamsScreen();
-      }
+      renderPlayers(docs);
     }, err => {
       content.innerHTML =
         '<div class="empty-hint">في خطأ في تحميل البيانات: ' + err.message + '</div>';

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الأهداف</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0714;
+    --bg2:#150a29;
+    --violet:#a855f7;
+    --pink:#f0399e;
+    --cyan:#22e0e0;
+    --lime:#b6ff3c;
+    --amber:#ffb020;
+    --text:#f7f4ff;
+    --text-dim:#a79ecb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Cairo',sans-serif;
+    min-height:100vh;
+    padding:24px 20px 70px;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  .blobs{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+  .blobs::before,.blobs::after{
+    content:''; position:absolute; width:52vw; height:52vw; max-width:620px; max-height:620px;
+    border-radius:50%; filter:blur(90px); opacity:0.35;
+  }
+  .blobs::before{ top:-14%; right:-12%; background:radial-gradient(circle, var(--violet), transparent 70%); animation:drift1 16s ease-in-out infinite; }
+  .blobs::after{ bottom:-16%; left:-10%; background:radial-gradient(circle, var(--cyan), transparent 70%); animation:drift2 18s ease-in-out infinite; }
+  .blob-mid{
+    position:absolute; top:38%; left:50%; width:40vw; height:40vw; max-width:480px; max-height:480px;
+    border-radius:50%; filter:blur(100px); opacity:0.2; background:radial-gradient(circle, var(--pink), transparent 70%);
+    transform:translate(-50%,-50%); animation:drift3 20s ease-in-out infinite;
+  }
+  @keyframes drift1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-6%,8%) scale(1.1);}}
+  @keyframes drift2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(6%,-8%) scale(1.08);}}
+  @keyframes drift3{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-46%,-56%) scale(1.15);}}
+  .grain{
+    position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.4;
+    background-image:radial-gradient(rgba(255,255,255,0.5) 0.5px, transparent 0.5px);
+    background-size:3px 3px; mix-blend-mode:overlay;
+  }
+
+  .back-btn{
+    position:relative; z-index:1;
+    display:inline-flex; align-items:center; gap:6px;
+    color:var(--text-dim); text-decoration:none; font-size:13px;
+    border:1px solid rgba(168,85,247,0.28);
+    background:rgba(21,10,41,0.5);
+    padding:8px 16px; border-radius:999px;
+    backdrop-filter:blur(4px);
+    transition:border-color .2s ease, color .2s ease, box-shadow .2s ease;
+  }
+  .back-btn:hover{ border-color:var(--violet); color:var(--text); box-shadow:0 0 16px rgba(168,85,247,0.3); }
+
+  header{ position:relative; z-index:1; text-align:center; margin:30px 0 40px; }
+  .logo-small{
+    position:absolute; top:0; right:0; z-index:2; width:48px; height:auto;
+    filter:drop-shadow(0 0 14px rgba(168,85,247,0.4));
+  }
+  header .eyebrow{
+    display:inline-flex; align-items:center; gap:10px;
+    background:linear-gradient(90deg, var(--pink), var(--violet), var(--cyan));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    letter-spacing:5px; font-family:'Orbitron',sans-serif; font-size:11px; font-weight:800; text-transform:uppercase;
+  }
+  header h1{
+    font-size:clamp(24px, 5vw, 32px); font-weight:900; margin-top:12px; color:var(--text);
+    text-shadow:0 0 40px rgba(168,85,247,0.35); letter-spacing:0.5px;
+  }
+  header p{ color:var(--text-dim); margin-top:8px; font-size:14px; }
+
+  .player-grid{
+    position:relative; z-index:1;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:24px 16px;
+    max-width:1000px;
+    margin:0 auto;
+  }
+  .empty-hint{
+    position:relative; z-index:1;
+    text-align:center; color:var(--text-dim); font-size:14px;
+    padding:60px 10px; max-width:500px; margin:0 auto;
+    border:1px dashed rgba(168,85,247,0.3); border-radius:16px;
+  }
+  .spinner-wrap{ display:flex; flex-direction:column; align-items:center; gap:16px; padding:60px 0; }
+  .spinner{
+    width:52px; height:52px; border-radius:50%;
+    border:3px solid rgba(168,85,247,0.2); border-top-color:var(--violet);
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .hint{ text-align:center; color:var(--text-dim); font-size:13px; }
+
+  /* كارت اللاعب */
+  .fifa-card{
+    width:100%;
+    max-width:210px;
+    aspect-ratio:300/470;
+    margin:0 auto;
+    position:relative;
+    filter:drop-shadow(0 14px 26px rgba(0,0,0,0.6)) drop-shadow(0 0 18px rgba(255,176,32,0.14));
+    transition:transform .25s ease, filter .25s ease;
+    direction:ltr;
+  }
+  .fifa-card:hover{ transform:translateY(-6px) scale(1.03); filter:drop-shadow(0 18px 30px rgba(0,0,0,0.65)) drop-shadow(0 0 26px rgba(255,176,32,0.3)); }
+  .fifa-card .frame-svg{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+  .fifa-card .rank-badge{
+    position:absolute; left:6%; top:4%; width:28px; height:28px; border-radius:50%;
+    background:linear-gradient(135deg, var(--gold-soft,#e9c766), var(--gold,#d4af37));
+    color:#1a1406; display:flex; align-items:center; justify-content:center;
+    font-weight:900; font-size:13px; z-index:3; box-shadow:0 3px 8px rgba(0,0,0,0.35);
+  }
+  .fifa-card .goals-badge{
+    position:absolute; right:6%; top:4%; display:flex; flex-direction:column; align-items:center;
+    background:rgba(247,241,222,0.94); border-radius:10px; padding:5px 8px;
+    box-shadow:0 3px 8px rgba(0,0,0,0.3), 0 0 0 1px rgba(138,106,34,0.3) inset; z-index:3;
+  }
+  .fifa-card .goals-badge .num{ font-size:16px; font-weight:900; color:#7a5a1e; line-height:1; }
+  .fifa-card .goals-badge .lbl{ font-size:9px; font-weight:700; color:#4a3714; margin-top:1px; letter-spacing:.5px; }
+  .fifa-card .photo-wrap{
+    position:absolute; left:13%; right:13%; top:9%; height:56%;
+    overflow:hidden; border-radius:30px; z-index:1; background:transparent;
+  }
+  .fifa-card .photo-wrap img{ width:100%; height:100%; object-fit:contain; object-position:center top; display:block; border-radius:30px; }
+  .fifa-card .photo-wrap .shine{
+    position:absolute; inset:0;
+    background:linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.2) 48%, transparent 62%);
+    pointer-events:none;
+  }
+  .fifa-card .photo-wrap .fade{
+    position:absolute; left:0; right:0; bottom:0; height:38%;
+    background:linear-gradient(to bottom, transparent 0%, rgba(238,226,192,0.55) 55%, rgba(238,226,192,0.96) 100%);
+    pointer-events:none;
+  }
+  .fifa-card .name-bar{
+    position:absolute; left:10%; right:10%; top:67%; z-index:2; text-align:center;
+    padding-top:6px; border-top:1.5px dashed rgba(74,55,20,0.4);
+  }
+  .fifa-card .name-bar h3{
+    font-size:clamp(11px,3.8vw,14px); font-weight:900; letter-spacing:.3px; color:#3a2c10;
+    text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .fifa-card .name-bar .meta{ font-size:10px; color:#8a6a22; margin-top:3px; font-weight:700; }
+  .fifa-card .name-bar .team{ font-size:9px; color:#a4895a; margin-top:2px; }
+  @media (max-width:480px){ header h1{font-size:22px;} }
+  .logo-watermark{
+    position:fixed;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:min(60vw, 420px);
+    height:auto;
+    opacity:0.14;
+    z-index:0;
+    pointer-events:none;
+    filter:drop-shadow(0 0 30px rgba(168,85,247,0.25));
+  }
+</style>
+</head>
+<body>
+
+<div class="blobs"><div class="blob-mid"></div></div>
+<div class="grain"></div>
+<img class="logo-watermark" src="logo.png" alt="لجنة الأنشطة والمسابقات">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="fifaGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbe8ad"/>
+      <stop offset="15%" stop-color="#e9c766"/>
+      <stop offset="35%" stop-color="#c79a3a"/>
+      <stop offset="50%" stop-color="#8a6a22"/>
+      <stop offset="65%" stop-color="#c79a3a"/>
+      <stop offset="85%" stop-color="#e9c766"/>
+      <stop offset="100%" stop-color="#fbe8ad"/>
+    </linearGradient>
+    <linearGradient id="fifaCreamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f8f2df"/>
+      <stop offset="55%" stop-color="#eee2c0"/>
+      <stop offset="100%" stop-color="#e2d3a0"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<a class="back-btn" id="backLink" href="football-stage.html">→ رجوع للمرحلة</a>
+
+<header>
+  <img class="logo-small" src="logo.png" alt="لجنة الأنشطة والمسابقات">
+  <div class="eyebrow">دوري التسلية</div>
+  <h1 id="pageTitle">الأهداف</h1>
+  <p id="pageSubtitle">أكتر اللاعبين تسجيلاً للأهداف في المرحلة دي</p>
+</header>
+
+<div id="content">
+  <div class="spinner-wrap">
+    <div class="spinner"></div>
+    <div class="hint">بنحسب الأهداف...</div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyA3-lEsXUrT-TV8aPMFnfqK32SPpkS2UXY",
+    authDomain: "mhrgan-f86f9.firebaseapp.com",
+    projectId: "mhrgan-f86f9",
+    storageBucket: "mhrgan-f86f9.firebasestorage.app",
+    messagingSenderId: "105084606310",
+    appId: "1:105084606310:web:84f4433c113599eba29aa7"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  const params = new URLSearchParams(window.location.search);
+  const stage = params.get('stage') || '1';
+  const game = params.get('game') || 'football';
+
+  const stageNames = {
+    '1': 'المرحلة الأولى',
+    '2': 'المرحلة الثانية',
+    '3': 'المرحلة الثالثة',
+    '4': 'المرحلة الرابعة'
+  };
+
+  document.title = 'أهداف ' + (stageNames[stage] || 'المرحلة');
+  document.getElementById('pageSubtitle').textContent =
+    'أكتر اللاعبين تسجيلاً للأهداف - ' + (stageNames[stage] || 'المرحلة');
+  document.getElementById('backLink').href = `football-stage.html?stage=${stage}`;
+
+  const content = document.getElementById('content');
+
+  function fallbackAvatar(){
+    return 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 130"><rect width="100" height="130" fill="%231c2029"/><circle cx="50" cy="46" r="22" fill="%232a303c"/><path d="M10 130c0-30 18-46 40-46s40 16 40 46" fill="%232a303c"/></svg>';
+  }
+
+  function buildScorerCard(scorer, rank){
+    const card = document.createElement('div');
+    card.className = 'fifa-card';
+
+    card.innerHTML =
+      '<svg class="frame-svg" viewBox="0 0 300 430" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M150 6 C108 6 66 11 42 26 C24 37 15 53 15 74 L15 300 C15 335 30 362 55 380 C90 405 120 415 150 428 C180 415 210 405 245 380 C270 362 285 335 285 300 L285 74 C285 53 276 37 258 26 C234 11 192 6 150 6 Z" fill="url(#fifaCreamGrad)"/>' +
+        '<path d="M150 6 C108 6 66 11 42 26 C24 37 15 53 15 74 L15 300 C15 335 30 362 55 380 C90 405 120 415 150 428 C180 415 210 405 245 380 C270 362 285 335 285 300 L285 74 C285 53 276 37 258 26 C234 11 192 6 150 6 Z" fill="none" stroke="url(#fifaGoldGrad)" stroke-width="5"/>' +
+        '<path d="M150 6 C108 6 66 11 42 26 C24 37 15 53 15 74 L15 300 C15 335 30 362 55 380 C90 405 120 415 150 428 C180 415 210 405 245 380 C270 362 285 335 285 300 L285 74 C285 53 276 37 258 26 C234 11 192 6 150 6 Z" fill="none" stroke="#fff8e6" stroke-width="1.4" opacity="0.9" transform="translate(150 215) scale(0.965) translate(-150 -215)"/>' +
+      '</svg>';
+
+    const rankBadge = document.createElement('div');
+    rankBadge.className = 'rank-badge';
+    rankBadge.textContent = rank;
+    card.appendChild(rankBadge);
+
+    const goalsBadge = document.createElement('div');
+    goalsBadge.className = 'goals-badge';
+    goalsBadge.innerHTML =
+      '<div class="num">' + scorer.goals + '</div>' +
+      '<div class="lbl">⚽ هدف</div>';
+    card.appendChild(goalsBadge);
+
+    const photoWrap = document.createElement('div');
+    photoWrap.className = 'photo-wrap';
+
+    const avatar = document.createElement('img');
+    avatar.src = scorer.photo || fallbackAvatar();
+    avatar.onerror = () => { avatar.src = fallbackAvatar(); };
+    photoWrap.appendChild(avatar);
+
+    const shine = document.createElement('div');
+    shine.className = 'shine';
+    photoWrap.appendChild(shine);
+
+    const fade = document.createElement('div');
+    fade.className = 'fade';
+    photoWrap.appendChild(fade);
+
+    card.appendChild(photoWrap);
+
+    const nameBar = document.createElement('div');
+    nameBar.className = 'name-bar';
+
+    const h3 = document.createElement('h3');
+    h3.textContent = scorer.name;
+    nameBar.appendChild(h3);
+
+    if(scorer.age){
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.textContent = 'السن: ' + scorer.age;
+      nameBar.appendChild(meta);
+    }
+
+    if(scorer.teamName){
+      const team = document.createElement('div');
+      team.className = 'team';
+      team.textContent = scorer.teamName;
+      nameBar.appendChild(team);
+    }
+
+    card.appendChild(nameBar);
+
+    return card;
+  }
+
+  function normalizePlayer(p){
+    if(typeof p === 'string') return { name: p, age: '', photo: '' };
+    return { name: p.name || '', age: p.age || '', photo: p.photo || '' };
+  }
+
+  async function computeAndRender(matches){
+    const counts = {};
+    matches.forEach(m => {
+      const goalsA = Array.isArray(m.goalsA) ? m.goalsA : [];
+      const goalsB = Array.isArray(m.goalsB) ? m.goalsB : [];
+      goalsA.forEach(g => {
+        const key = m.teamAId + '::' + g.name;
+        if(!counts[key]) counts[key] = { teamId: m.teamAId, name: g.name, goals: 0 };
+        counts[key].goals++;
+      });
+      goalsB.forEach(g => {
+        const key = m.teamBId + '::' + g.name;
+        if(!counts[key]) counts[key] = { teamId: m.teamBId, name: g.name, goals: 0 };
+        counts[key].goals++;
+      });
+    });
+
+    const entries = Object.values(counts);
+    if(entries.length === 0){
+      content.innerHTML = '<div class="empty-hint">لسه محدش سجل أي هدف في المرحلة دي</div>';
+      return;
+    }
+
+    const teamIds = [...new Set(entries.map(e => e.teamId))];
+    const teamsData = {};
+    await Promise.all(teamIds.map(id =>
+      db.collection('teams').doc(id).get().then(doc => {
+        teamsData[id] = doc.exists ? doc.data() : null;
+      }).catch(() => { teamsData[id] = null; })
+    ));
+
+    entries.forEach(e => {
+      const team = teamsData[e.teamId];
+      e.teamName = team ? team.name : '';
+      let playerInfo = null;
+      if(team && Array.isArray(team.players)){
+        const found = team.players.map(normalizePlayer).find(p => p.name === e.name);
+        if(found) playerInfo = found;
+      }
+      e.age = playerInfo ? playerInfo.age : '';
+      e.photo = playerInfo ? playerInfo.photo : '';
+    });
+
+    entries.sort((a, b) => b.goals - a.goals || a.name.localeCompare(b.name, 'ar'));
+
+    const grid = document.createElement('div');
+    grid.className = 'player-grid';
+    entries.forEach((scorer, i) => grid.appendChild(buildScorerCard(scorer, i + 1)));
+
+    content.innerHTML = '';
+    content.appendChild(grid);
+  }
+
+  db.collection('matches')
+    .where('game', '==', game)
+    .where('stage', '==', stage)
+    .onSnapshot(snapshot => {
+      const matches = [];
+      snapshot.forEach(doc => matches.push(doc.data()));
+      computeAndRender(matches);
+    }, err => {
+      content.innerHTML = '<div class="empty-hint">في خطأ في تحميل البيانات: ' + err.message + '</div>';
+    });
+</script>
+
+</body>
+</html>

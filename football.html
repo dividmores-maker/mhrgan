@@ -5,132 +5,177 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>كورة - المراحل</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0f1115;
-    --bg2:#161a22;
-    --gold:#d4af37;
-    --gold-soft:#e9c766;
-    --text:#f2f0ea;
-    --text-dim:#9aa0ab;
-    --line:rgba(212,175,55,0.18);
+    --bg:#0a0714;
+    --bg2:#150a29;
+    --violet:#a855f7;
+    --pink:#f0399e;
+    --cyan:#22e0e0;
+    --lime:#b6ff3c;
+    --amber:#ffb020;
+    --text:#f7f4ff;
+    --text-dim:#a79ecb;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
   body{
-    background:
-      radial-gradient(circle at 20% 10%, rgba(212,175,55,0.06), transparent 40%),
-      radial-gradient(circle at 80% 90%, rgba(212,175,55,0.05), transparent 40%),
-      var(--bg);
+    background:var(--bg);
     color:var(--text);
     font-family:'Cairo',sans-serif;
     min-height:100vh;
-    padding:24px 20px 60px;
+    padding:24px 20px 70px;
+    position:relative;
+    overflow-x:hidden;
   }
+
+  .blobs{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+  .blobs::before,.blobs::after{
+    content:''; position:absolute; width:52vw; height:52vw; max-width:620px; max-height:620px;
+    border-radius:50%; filter:blur(90px); opacity:0.35;
+  }
+  .blobs::before{ top:-14%; right:-12%; background:radial-gradient(circle, var(--violet), transparent 70%); animation:drift1 16s ease-in-out infinite; }
+  .blobs::after{ bottom:-16%; left:-10%; background:radial-gradient(circle, var(--cyan), transparent 70%); animation:drift2 18s ease-in-out infinite; }
+  .blob-mid{
+    position:absolute; top:38%; left:50%; width:40vw; height:40vw; max-width:480px; max-height:480px;
+    border-radius:50%; filter:blur(100px); opacity:0.2; background:radial-gradient(circle, var(--pink), transparent 70%);
+    transform:translate(-50%,-50%); animation:drift3 20s ease-in-out infinite;
+  }
+  @keyframes drift1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-6%,8%) scale(1.1);}}
+  @keyframes drift2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(6%,-8%) scale(1.08);}}
+  @keyframes drift3{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-46%,-56%) scale(1.15);}}
+  .grain{
+    position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.4;
+    background-image:radial-gradient(rgba(255,255,255,0.5) 0.5px, transparent 0.5px);
+    background-size:3px 3px; mix-blend-mode:overlay;
+  }
+  .logo-watermark{
+    position:fixed;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:min(60vw, 420px);
+    height:auto;
+    opacity:0.14;
+    z-index:0;
+    pointer-events:none;
+    filter:drop-shadow(0 0 30px rgba(168,85,247,0.25));
+  }
+
   .back-btn{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    color:var(--text-dim);
-    text-decoration:none;
-    font-size:13px;
-    border:1px solid var(--line);
-    padding:8px 14px;
-    border-radius:999px;
-    transition:border-color .2s ease, color .2s ease;
+    position:relative; z-index:1;
+    display:inline-flex; align-items:center; gap:6px;
+    color:var(--text-dim); text-decoration:none; font-size:13px;
+    border:1px solid rgba(168,85,247,0.28);
+    background:rgba(21,10,41,0.5);
+    padding:8px 16px; border-radius:999px;
+    backdrop-filter:blur(4px);
+    transition:border-color .2s ease, color .2s ease, box-shadow .2s ease;
   }
-  .back-btn:hover{border-color:var(--gold);color:var(--gold-soft);}
-  header{
-    text-align:center;
-    margin:30px 0 44px;
+  .back-btn:hover{ border-color:var(--violet); color:var(--text); box-shadow:0 0 16px rgba(168,85,247,0.3); }
+
+  header{ position:relative; z-index:1; text-align:center; margin:30px 0 48px; }
+  .logo-small{
+    position:absolute; top:0; right:0; z-index:2; width:48px; height:auto;
+    filter:drop-shadow(0 0 14px rgba(168,85,247,0.4));
   }
   header .eyebrow{
-    color:var(--gold);
-    letter-spacing:4px;
-    font-size:12px;
-    font-weight:700;
-    text-transform:uppercase;
+    display:inline-flex; align-items:center; gap:10px;
+    background:linear-gradient(90deg, var(--pink), var(--violet), var(--cyan));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    letter-spacing:5px; font-family:'Orbitron',sans-serif; font-size:11px; font-weight:800; text-transform:uppercase;
   }
   header h1{
-    font-size:32px;
-    font-weight:900;
-    margin-top:10px;
+    font-size:clamp(26px, 5vw, 36px); font-weight:900; margin-top:12px; color:var(--text);
+    text-shadow:0 0 40px rgba(168,85,247,0.35); letter-spacing:0.5px;
   }
-  header p{
-    color:var(--text-dim);
-    margin-top:8px;
-    font-size:14px;
-  }
+  header p{ color:var(--text-dim); margin-top:8px; font-size:14px; }
+
   .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
-    gap:18px;
-    max-width:900px;
-    margin:0 auto;
+    position:relative; z-index:1;
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:20px; max-width:900px; margin:0 auto; perspective:1200px;
   }
+
   .card{
-    background:linear-gradient(160deg, var(--bg2), #10131a);
-    border:1px solid var(--line);
-    border-radius:16px;
-    padding:30px 18px;
+    --accent:var(--violet);
+    --mx:50%; --my:50%;
+    background:linear-gradient(160deg, var(--bg2), #0e0620);
+    border-radius:18px;
+    padding:34px 18px;
     text-align:center;
     cursor:pointer;
     position:relative;
     overflow:hidden;
-    transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    transform-style:preserve-3d;
+    will-change:transform;
+    transition:box-shadow .3s ease;
   }
-  .card::before{
-    content:'';
-    position:absolute;
-    inset:0;
-    background:linear-gradient(180deg, rgba(212,175,55,0.08), transparent 60%);
-    opacity:0;
-    transition:opacity .25s ease;
+  .ring{
+    position:absolute; inset:0; border-radius:18px; padding:2px;
+    background:linear-gradient(135deg, var(--accent), transparent 40%, transparent 60%, var(--accent));
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude;
+    opacity:0.5; z-index:2; pointer-events:none; transition:opacity .3s ease;
   }
+  .sheen{
+    position:absolute; inset:0; z-index:1; opacity:0;
+    background:radial-gradient(260px circle at var(--mx) var(--my),
+      rgba(255,255,255,0.16), color-mix(in srgb, var(--accent) 45%, transparent) 35%, transparent 62%);
+    mix-blend-mode:screen; transition:opacity .35s ease; pointer-events:none;
+  }
+  .card:hover .ring{ opacity:1; }
+  .card:hover .sheen{ opacity:1; }
   .card:hover{
-    transform:translateY(-6px);
-    border-color:var(--gold);
-    box-shadow:0 14px 30px rgba(0,0,0,0.45);
+    box-shadow:0 20px 40px rgba(0,0,0,0.5), 0 0 30px color-mix(in srgb, var(--accent) 50%, transparent);
   }
-  .card:hover::before{opacity:1;}
+  .card-content{ position:relative; z-index:3; transform:translateZ(28px); }
+
   .stage-num{
-    width:56px;height:56px;
-    margin:0 auto 16px;
-    display:flex;align-items:center;justify-content:center;
+    width:58px; height:58px; margin:0 auto 16px;
+    display:flex; align-items:center; justify-content:center;
     border-radius:50%;
-    background:rgba(212,175,55,0.08);
-    border:1px solid var(--line);
+    background:color-mix(in srgb, var(--accent) 14%, transparent);
+    border:1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    box-shadow:0 0 18px color-mix(in srgb, var(--accent) 30%, transparent);
+    font-family:'Orbitron',sans-serif;
     font-size:22px;
     font-weight:900;
-    color:var(--gold-soft);
-    position:relative;
-    z-index:1;
+    color:var(--accent);
   }
-  .card h2{
-    font-size:17px;
-    font-weight:700;
-    position:relative;
-    z-index:1;
-  }
+  .card h2{ font-size:17px; font-weight:800; }
   .card span.tag{
-    display:block;
-    margin-top:6px;
-    font-size:11px;
-    color:var(--text-dim);
-    position:relative;
-    z-index:1;
+    display:block; margin-top:6px; font-family:'Orbitron',sans-serif; font-size:10px;
+    font-weight:700; letter-spacing:2.5px; color:var(--accent);
   }
+
+  .card:nth-child(1){ --accent:var(--lime); }
+  .card:nth-child(2){ --accent:var(--violet); }
+  .card:nth-child(3){ --accent:var(--amber); }
+  .card:nth-child(4){ --accent:var(--cyan); }
+
   @media (max-width:480px){
     header h1{font-size:24px;}
     .grid{grid-template-columns:repeat(2,1fr);}
   }
+  @media (hover:none){ .sheen{display:none;} .ring{opacity:0.45;} }
 </style>
 </head>
 <body>
 
+<div class="blobs"><div class="blob-mid"></div></div>
+<div class="grain"></div>
+<img class="logo-watermark" src="logo.png" alt="لجنة الأنشطة والمسابقات">
+
 <a class="back-btn" href="games.html">→ رجوع للألعاب</a>
 
 <header>
+  <img class="logo-small" src="logo.png" alt="لجنة الأنشطة والمسابقات">
   <div class="eyebrow">دوري التسلية</div>
   <h1>كورة</h1>
   <p>اختر المرحلة</p>
@@ -138,31 +183,76 @@
 
 <div class="grid">
 
-  <div class="card" onclick="location.href='football-stage.html?stage=1'">
-    <div class="stage-num">١</div>
-    <h2>المرحلة الأولى</h2>
-    <span class="tag">STAGE 1</span>
+  <div class="card" tabindex="0" onclick="location.href='football-stage.html?stage=1'">
+    <div class="ring"></div>
+    <div class="sheen"></div>
+    <div class="card-content">
+      <div class="stage-num">١</div>
+      <h2>المرحلة الأولى</h2>
+      <span class="tag">STAGE 1</span>
+    </div>
   </div>
 
-  <div class="card" onclick="location.href='football-stage.html?stage=2'">
-    <div class="stage-num">٢</div>
-    <h2>المرحلة الثانية</h2>
-    <span class="tag">STAGE 2</span>
+  <div class="card" tabindex="0" onclick="location.href='football-stage.html?stage=2'">
+    <div class="ring"></div>
+    <div class="sheen"></div>
+    <div class="card-content">
+      <div class="stage-num">٢</div>
+      <h2>المرحلة الثانية</h2>
+      <span class="tag">STAGE 2</span>
+    </div>
   </div>
 
-  <div class="card" onclick="location.href='football-stage.html?stage=3'">
-    <div class="stage-num">٣</div>
-    <h2>المرحلة الثالثة</h2>
-    <span class="tag">STAGE 3</span>
+  <div class="card" tabindex="0" onclick="location.href='football-stage.html?stage=3'">
+    <div class="ring"></div>
+    <div class="sheen"></div>
+    <div class="card-content">
+      <div class="stage-num">٣</div>
+      <h2>المرحلة الثالثة</h2>
+      <span class="tag">STAGE 3</span>
+    </div>
   </div>
 
-  <div class="card" onclick="location.href='football-stage.html?stage=4'">
-    <div class="stage-num">٤</div>
-    <h2>المرحلة الرابعة</h2>
-    <span class="tag">STAGE 4</span>
+  <div class="card" tabindex="0" onclick="location.href='football-stage.html?stage=4'">
+    <div class="ring"></div>
+    <div class="sheen"></div>
+    <div class="card-content">
+      <div class="stage-num">٤</div>
+      <h2>المرحلة الرابعة</h2>
+      <span class="tag">STAGE 4</span>
+    </div>
   </div>
 
 </div>
+
+<script>
+  const cards = document.querySelectorAll('.card');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const supportsHover = window.matchMedia('(hover: hover)').matches;
+
+  cards.forEach(card => {
+    card.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); card.click(); }
+    });
+
+    if(reduceMotion || !supportsHover) return;
+    const maxTilt = 10;
+
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;
+      const py = (e.clientY - rect.top) / rect.height;
+      const tiltX = (0.5 - py) * maxTilt;
+      const tiltY = (px - 0.5) * maxTilt;
+      card.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+      card.style.setProperty('--mx', `${px * 100}%`);
+      card.style.setProperty('--my', `${py * 100}%`);
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
+  });
+</script>
 
 </body>
 </html>
