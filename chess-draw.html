@@ -307,7 +307,7 @@
   }
 
   // الصفحة دي بتعرض نتيجة القرعة بس؛ عمل/إعادة القرعة بقى من لوحة التحكم (admin.html) بس
-  db.collection('teams')
+  db.collection('players')
     .where('game', '==', game)
     .where('stage', '==', stage)
     .onSnapshot(snapshot => {

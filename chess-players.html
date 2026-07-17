@@ -317,13 +317,12 @@
     content.appendChild(grid);
   }
 
-  db.collection('teams')
+  db.collection('players')
     .where('game', '==', game)
     .where('stage', '==', stage)
     .onSnapshot(snapshot => {
-      const teams = [];
-      snapshot.forEach(doc => teams.push({ id: doc.id, ...doc.data() }));
-      const docs = teams.map(teamToPlayer);
+      const docs = [];
+      snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
       docs.sort((a,b) => (a.order||0) - (b.order||0));
       renderPlayers(docs);
     }, err => {
